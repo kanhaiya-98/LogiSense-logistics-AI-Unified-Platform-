@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.log
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+
+# Environment secrets
+.env.local
+.env.*.local
+*.env
+
+# Node.js / Frontend
+node_modules/
+dist/
+.next/
+out/
+
+# Build artifacts
+*.tsbuildinfo
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+
+# Lock files (keep package-lock.json and bun.lock, exclude bun.lockb binary)
+bun.lockb
