@@ -407,3 +407,34 @@ export const transfers: Transfer[] = [
   { id: 'TRF-01', sku: 'SKU-441', units: 5000, from: 'WH-03 Bangalore', to: 'WH-04 Pune', vehicle: 'Return-leg truck', cost: '₹4,200', co2: '0.8t', eta: '4 days before spike' },
   { id: 'TRF-02', sku: 'SKU-89', units: 2000, from: 'WH-02 Delhi', to: 'WH-01 Mumbai', vehicle: 'Rail freight', cost: '₹1,800', co2: '0.3t', eta: '2 days' },
 ];
+
+// ===== BLOCKCHAIN LOG =====
+export interface BlockchainEntry {
+  id: string;
+  timestamp: string;
+  action: string;
+  actor: string;
+  hash: string;
+  prevHash: string;
+  batch: string;
+  verified: boolean;
+}
+
+export const blockchainLog: BlockchainEntry[] = [
+  { id: 'BLK-012', timestamp: '2026-03-25 19:32:01', action: 'Carrier swap CAR-07 → CAR-11 (47 shipments)', actor: 'HITL Operator', hash: 'a3f8c2d1e5b70f92', prevHash: 'b7e2f1a8c3d94d81', batch: 'BATCH-012', verified: true },
+  { id: 'BLK-011', timestamp: '2026-03-25 19:28:15', action: '62-shipment reroute — Delhi corridor | CARBON policy', actor: 'HITL Operator', hash: 'b7e2f1a8c3d94d81', prevHash: 'c1d5e8f2a7b32a64', batch: 'BATCH-011', verified: true },
+  { id: 'BLK-010', timestamp: '2026-03-25 19:15:44', action: 'WH-01 overflow → WH-04 redirect (12 shipments)', actor: 'Auto (Observer)', hash: 'c1d5e8f2a7b32a64', prevHash: 'd9a3b7c1e5f81c57', batch: 'BATCH-010', verified: true },
+  { id: 'BLK-009', timestamp: '2026-03-25 18:58:22', action: 'ETA recalculation — monsoon delay (15 shipments)', actor: 'Auto (Reasoner)', hash: 'd9a3b7c1e5f81c57', prevHash: 'e5f1a2b8c3d73b29', batch: 'BATCH-009', verified: true },
+  { id: 'BLK-008', timestamp: '2026-03-25 18:42:11', action: 'CARBON_FIRST policy activation — all routes', actor: 'Auto (Actor)', hash: 'e5f1a2b8c3d73b29', prevHash: 'f2a8b3c7d1e94a18', batch: 'BATCH-008', verified: true },
+  { id: 'BLK-007', timestamp: '2026-03-25 18:21:55', action: 'AQI Delhi > 250 — carbon surcharge applied', actor: 'Auto (Observer)', hash: 'f2a8b3c7d1e94a18', prevHash: '1a2b3c4d5e6f7a8b', batch: 'BATCH-007', verified: true },
+  { id: 'BLK-006', timestamp: '2026-03-25 17:55:30', action: 'Red Team stress test — 85% viability confirmed', actor: 'System', hash: '1a2b3c4d5e6f7a8b', prevHash: '2b3c4d5e6f7a8b9c', batch: 'BATCH-006', verified: true },
+];
+
+export const blockchainStats = {
+  total_blocks: 12,
+  verified_blocks: 12,
+  pending_verification: 0,
+  last_merkle_root: '0x7f3a...dc91',
+  network: 'Polygon Amoy (Testnet)',
+  total_decisions_anchored: 47,
+};

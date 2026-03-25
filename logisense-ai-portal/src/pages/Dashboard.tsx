@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useCarriers, useAgentStatus } from '@/hooks/useApi';
-import { supabase } from '@/lib/supabaseClient';
-import { slaChartData, aqiData } from '@/lib/mockData'; // Keeping static for now, can be updated later  
+import { slaChartData, aqiData, activityFeed } from '@/lib/mockData';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 function StatusDot({ status }: { status: string }) {
@@ -72,41 +71,22 @@ export default function Dashboard() {
   const { data: carriersData = [] } = useCarriers();
   const { data: agentStatus } = useAgentStatus();
   
-  const [feed, setFeed] = useState<any[]>([]);
-
-  // Subscribe to Supabase Realtime for Agent Events
+  // Simulate live feed: start with first 3 events, add more over time
+  const [feed, setFeed] = useState(activityFeed.slice(0, 3));
   useEffect(() => {
-    // Fetch initial feed
-    const fetchFeed = async () => {
-      const { data } = await supabase
-        .from('agent_events')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10);
-      if (data) setFeed(data);
-    };
-    fetchFeed();
-
-    // Subscribe to new events
-    const channel = supabase
-      .channel('schema-db-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'agent_events',
-        },
-        (payload) => {
-          setFeed((prev) => [payload.new, ...prev].slice(0, 10));
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    let idx = 3;
+    const timer = setInterval(() => {
+      if (idx < activityFeed.length) {
+        setFeed(prev => [activityFeed[idx], ...prev].slice(0, 10));
+        idx++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 4000);
+    return () => clearInterval(timer);
   }, []);
+
+
 
   return (
     <AppLayout>
@@ -148,14 +128,14 @@ export default function Dashboard() {
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {feed.map((item) => (
                   <div key={item.id} className="flex items-start gap-2">
-                    <div className={`text-[10px] px-1.5 py-0.5 rounded-full mt-0.5 shrink-0 ${feedTypeColor(item.severity)}`}>
-                      {new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    <div className={`text-[10px] px-1.5 py-0.5 rounded-full mt-0.5 shrink-0 ${feedTypeColor(item.type)}`}>
+                      {item.time}
                     </div>
                     <span className="text-[12px] text-foreground leading-relaxed">{item.message}</span>
                   </div>
                 ))}
                 {feed.length === 0 && (
-                   <div className="text-[12px] text-muted-foreground p-2">Wait a moment for events to arrive...</div>
+                   <div className="text-[12px] text-muted-foreground p-2">Loading activity feed...</div>
                 )}
               </div>
             </div>
