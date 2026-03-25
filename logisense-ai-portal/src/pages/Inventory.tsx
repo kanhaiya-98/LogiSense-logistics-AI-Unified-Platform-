@@ -19,23 +19,11 @@ function MiniSparkline({ data, color }: { data: number[]; color: string }) {
 }
 
 export default function Inventory() {
-  const { data = { inventory: [], transfers: [] } } = useInventory();
+  const { data = { warehouseInventory: [], skuForecasts: [], transfers: [] } } = useInventory();
   const generateTransfer = useGenerateRebalance();
   const [generating, setGenerating] = useState<string | null>(null);
 
-  const warehouseGroups = (data.inventory || []).reduce((acc: any, item: any) => {
-    if (!acc[item.warehouse_id]) {
-      acc[item.warehouse_id] = { warehouse: item.warehouse_id, skus: [] };
-    }
-    acc[item.warehouse_id].skus.push({
-      sku: item.sku,
-      current: item.current_stock,
-      safetyStock: item.safety_stock,
-      status: item.status
-    });
-    return acc;
-  }, {});
-  const warehouseInventory = Object.values(warehouseGroups);
+  const warehouseInventory = data.warehouseInventory || [];
   const transfers = data.transfers || [];
 
   const handleGenerate = async (warehouse_id: string, sku: string) => {

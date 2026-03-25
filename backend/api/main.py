@@ -13,9 +13,13 @@ Environment variables:
 Deploy on Railway / Render / Fly.io — just set GEMINI_API_KEY.
 """
 
-import os, hashlib, json, random, time, uuid
+import os, hashlib, json, random, time, uuid, logging
 from datetime import datetime, timedelta
 from typing import Any
+from dotenv import load_dotenv
+
+# Load .env explicitly so variables are picked up successfully
+load_dotenv()
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,15 +30,17 @@ try:
     from google import genai as _genai
     from google.genai import types as _types
     GEMINI_KEY = os.getenv("GEMINI_API_KEY", "")
-    GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
+    GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemma-3-27b-it")
     if GEMINI_KEY:
         _client = _genai.Client(api_key=GEMINI_KEY)
     else:
         _client = None
-except ImportError:
+except Exception as e:
+    # Catch any error during SDK or Client initialization
+    logging.error(f"Failed to initialize Gemini Client: {e}")
     _client = None
     GEMINI_KEY = ""
-    GEMINI_MODEL = "gemini-2.0-flash"
+    GEMINI_MODEL = "gemma-3-27b-it"
 
 
 # ── App setup ──────────────────────────────────────────────
