@@ -2,6 +2,13 @@
 
 **An End-to-End AI Logistics OS combining Predictive Analytics (F1-F4), the Zen Platform (ZenDec, ZenRTO, ZenETA), and Advanced LangGraph Intelligence (F8-F10).**
 
+<p align="center">
+  <img src="assets/dashboard.png" alt="LogiSense Dashboard" width="45%" style="margin: 10px;"/>
+  <img src="assets/decision.png" alt="Decision Engine" width="45%" style="margin: 10px;"/>
+  <br/>
+  <img src="assets/risk.png" alt="Geopolitical Risk Intel" width="60%" style="margin: 20px;"/>
+</p>
+
 ## 🌐 Platform Architecture
 
 The LogiSense Unified Platform operates via a synchronized Next.js frontend and a monolithic FastAPI backend serving multiple intelligent sub-agents that communicate over Redis and LangGraph.
